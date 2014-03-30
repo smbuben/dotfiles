@@ -1,0 +1,15 @@
+#OPTIONS=!autopickup
+OPTIONS=pickup_types:$
+OPTIONS=paranoid_hit
+OPTIONS=menucolors
+OPTIONS=menustyle:full
+OPTIONS=menu_headings:bold
+OPTIONS=msg_window:reversed
+OPTIONS=color
+OPTIONS=lit_corridor
+OPTIONS=hilite_pet
+OPTIONS=boulder:0
+OPTIONS=dogname:Fritz
+OPTIONS=catname:Grady
+OPTIONS=horsename:Donkey
+OPTIONS=disclose:+i +a +v -g +c

@@ -1,0 +1,11 @@
+[core]
+	editor = vim
+	autocrlf = input
+[help]
+	autocorrect = 1
+[color]
+	ui = true
+[merge]
+	tool = meld
+[include]
+    path = .gitconfig.local
