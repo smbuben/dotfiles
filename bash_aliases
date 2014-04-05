@@ -2,16 +2,16 @@
 alias l='ls'
 alias sl='ls'
 alias lls='ls'
-alias ll='ls -l'
-alias la='ls -la'
-alias lt='ls -lart'
-alias lh='ls -lh'
-alias lH='ls -lAh'
+alias ll='ls -lh'
+alias la='ls -lah'
+alias lt='ls -larth'
 alias dw='find . -type f'
+alias ff='find . -name'
 
 # Filesystem Movement
 alias ccd='cd'
 alias cdd='cd'
+alias cd..='cd ..'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -31,6 +31,8 @@ alias lesss='less'
 alias lss='less'
 
 # Searching
+alias grp='grep'
+alias grpe='grep'
 alias grepi='grep -i'
 alias grepr='grep -R'
 alias grepir='grep -i -R'
@@ -38,8 +40,14 @@ alias grepri='grep -i -R'
 
 # History
 alias r='fc -s'
+alias hgrep='history | grep'
+
+# Processes
+alias ps='ps -ef'
+alias psgrep='ps -ef | grep'
 
 # Miscellaneous
 alias unmount='umount'
-alias ps='ps -ef'
+alias df='df -h'
 alias tm='tmux'
+alias :q='exit'

@@ -12,8 +12,11 @@ shopt -s histappend
 export HISTCONTROL=ignoreboth
 
 # custom history size
-export HISTSIZE=999
-export HISTFILESIZE=999
+export HISTSIZE=1000
+export HISTFILESIZE=1000
+
+# timestamp history
+export HISTTIMEFORMAT='%F %T '
 
 # -----------------------------------------------------------------------------
 #   PATH CONTROL
@@ -68,14 +71,24 @@ unset dircolors
 # -----------------------------------------------------------------------------
 
 NOCOLOR='\e[0m'
-BLACK='\e[1;30m'
-RED='\e[1;31m'
-GREEN='\e[1;32m'
-YELLOW='\e[1;33m'
-BLUE='\e[1;34m'
-MAGENTA='\e[1;35m'
-CYAN='\e[1;36m'
-WHITE='\e[1;37m'
+
+BLACK='\e[0;30m'
+RED='\e[0;31m'
+GREEN='\e[0;32m'
+YELLOW='\e[0;33m'
+BLUE='\e[0;34m'
+MAGENTA='\e[0;35m'
+CYAN='\e[0;36m'
+WHITE='\e[0;37m'
+
+BLACK_BD='\e[1;30m'
+RED_BD='\e[1;31m'
+GREEN_BD='\e[1;32m'
+YELLOW_BD='\e[1;33m'
+BLUE_BD='\e[1;34m'
+MAGENTA_BD='\e[1;35m'
+CYAN_BD='\e[1;36m'
+WHITE_BD='\e[1;37m'
 
 function __make_truncated_pwd()
 {
@@ -99,9 +112,9 @@ function __make_git_status()
     fi
     flags="$(
         echo "$info" | awk 'BEGIN {r=""} \
-            /^Changes to be committed:$/        {r=r "+"}\
-            /^Changes not staged for commit:$/  {r=r "!"}\
-            /^Untracked files:$/                {r=r "?"}\
+            /^Changes to be committed:$/        {r=r "+"} \
+            /^Changes not staged for commit:$/  {r=r "!"} \
+            /^Untracked files:$/                {r=r "?"} \
             END {print r}'
     )"
     echo $branch$flags
@@ -118,16 +131,31 @@ function __add_to_prompt()
 
 function __set_prompt()
 {
-    local sepcolor=$BLACK
-    local histcolor=$BLACK
-    local usercolor=$GREEN
-    if [ "$USER" = "root" ] ; then
-        usercolor=$RED
-    fi
-    local hostcolor=$BLUE
-    local pathcolor=$WHITE
-    local vcscolor=$MAGENTA
-    local termcolor=$NOCOLOR
+    local sepcolor histcolor usercolor hostcolor pathcolor vcscolor
+    case "$TERM" in
+        *256color)
+            sepcolor='\e[38;05;242m'
+            histcolor='\e[38;05;66m'
+            usercolor='\e[38;05;46m'
+            if [ "$USER" = "root" ] ; then
+                usercolor='\e[38;05;160m'
+            fi
+            hostcolor='\e[38;05;33m'
+            pathcolor='\e[38;05;255m'
+            vcscolor='\e[38;05;127m'
+            ;;
+        *)
+            sepcolor=$NOCOLOR
+            histcolor=$NOCOLOR
+            usercolor=$GREEN
+            if [ "$USER" = "root" ] ; then
+                usercolor=$RED
+            fi
+            hostcolor=$BLUE
+            pathcolor=$WHITE
+            vcscolor=$MAGENTA
+            ;;
+    esac
     PS1=""
     __add_to_prompt $histcolor "\!"
     __add_to_prompt $usercolor "\u" $sepcolor ":"
@@ -139,12 +167,7 @@ function __set_prompt()
     fi
     PS1="\[$sepcolor\][$PS1\[$sepcolor\]]"
     __add_to_prompt $usercolor "\\$"
-    __add_to_prompt $termcolor " "
-}
-
-function __set_simple_prompt()
-{
-    PS1='\u@\h:\w\$ '
+    __add_to_prompt $NOCOLOR " "
 }
 
 function __set_titlebar()
@@ -158,7 +181,7 @@ case "$TERM" in
         PROMPT_COMMAND='__set_prompt; __set_titlebar'
         ;;
     *)
-        __set_simple_prompt
+        PS1='[\u@\h:\w]\$ '
         ;;
 esac
 
@@ -172,6 +195,59 @@ if [ $? -ne 0 ] ; then
     EDITOR=`which vi`
 fi
 export EDITOR
+
+# -----------------------------------------------------------------------------
+#   USEFUL FUNCTIONS
+# -----------------------------------------------------------------------------
+
+function up()
+{
+    local count=$1
+    if [ -z "$count" ] ; then
+        count=1
+    fi
+    local parents="."
+    for i in $(seq 1 $count) ; do
+        parents="$parents/.."
+    done
+    cd $parents
+}
+
+function infl()
+{
+    [ ! -f $1 ] && return
+    case $1 in
+        *.tar.bz2)  tar xjf $1      ;;
+        *.tar.gz)   tar xzf $1      ;;
+        *.bz2)      bunzip2 $1      ;;
+        *.gz)       gunzip $1       ;;
+        *.tar)      tar xf $1       ;;
+        *.tbz2)     tar xjf $1      ;;
+        *.tgz)      tar xzf $1      ;;
+        *.zip)      unzip $1        ;;
+        *.rar)      rar x $1        ;;
+        *.Z)        uncompress $1   ;;
+        *.7z)       7z x $1         ;;
+    esac
+}
+
+function extip()
+{
+    wget -q -O - http://checkip.dyndns.org \
+        | grep -o -E '[0-9].+[0-9]+.[0-9]+.[0-9]+'
+}
+
+function man()
+{
+    env LESS_TERMCAP_mb=$'\e[01;31m' \
+    LESS_TERMCAP_md=$'\e[01;38;5;75m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[38;5;255m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[04;38;5;144m' \
+    man "$@"
+}
 
 # -----------------------------------------------------------------------------
 #   OTHER SHELL MODIFIER FILES
