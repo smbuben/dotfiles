@@ -45,10 +45,14 @@ if [ "$TERM" != "screen" ] ; then
         rxvt-xpm)
             TERM=rxvt-256color
             ;;
+        # make sure that ssh->tmux tracks terminal capabilities
+        '')
+            export COLORTERM=$TERM
+            ;;
     esac
 else
     case "$COLORTERM" in
-        gnome-terminal|xfce4-terminal|rxvt-xpm)
+        gnome-terminal|xfce4-terminal|rxvt-xpm|*256color)
             TERM=screen-256color
             ;;
     esac
@@ -94,7 +98,8 @@ function __make_truncated_pwd()
 {
     local maxlen=32
     local prelen=7
-    local truncpwd="${PWD/#$HOME/\~}"
+    local tilde='~'
+    local truncpwd="${PWD/#$HOME/$tilde}"
     if [ ${#truncpwd} -gt $maxlen ] ; then
         truncpwd="${truncpwd:0:$prelen}..${truncpwd:$((${#truncpwd}-$maxlen+$prelen)):$(($maxlen-$prelen))}"
     fi
@@ -112,9 +117,9 @@ function __make_git_status()
     fi
     flags="$(
         echo "$info" | awk 'BEGIN {r=""} \
-            /^Changes to be committed:$/        {r=r "+"} \
-            /^Changes not staged for commit:$/  {r=r "!"} \
-            /^Untracked files:$/                {r=r "?"} \
+            /^(# )?Changes to be committed:$/        {r=r "+"} \
+            /^(# )?Changes not staged for commit:$/  {r=r "!"} \
+            /^(# )?Untracked files:$/                {r=r "?"} \
             END {print r}'
     )"
     echo $branch$flags
