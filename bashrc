@@ -201,6 +201,10 @@ if [ $? -ne 0 ] ; then
 fi
 export EDITOR
 
+# tab-completion in the python shell (https://jedi.jedidjah.ch/en/latest/)
+# automatically installed as part of vim-youcompleteme
+export PYTHONSTARTUP="$(python -m jedi repl)"
+
 # -----------------------------------------------------------------------------
 #   USEFUL FUNCTIONS
 # -----------------------------------------------------------------------------

@@ -26,8 +26,8 @@ filetype indent off
 " No filetype automatic commenting
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" Locations for plugins, colors, etc...
-set runtimepath=~/.vim,$VIMRUNTIME
+" apt-get install vim-youcompleteme
+set runtimepath+=/usr/share/vim-youcompleteme
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -198,19 +198,14 @@ map <leader>e :e ~/.vimrc<CR>
 set tags=./tags;/
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Omni-completion
+" => YouCompleteMe
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Override the built in C completion with OmniCppComplete plugin
-set omnifunc=syntaxcomplete#Complete
+" Shortcut declaration jumps
+nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
 
-" Display an inline list of completion choices
-set completeopt=menuone,menu,longest
+" Shortcut definition (i.e. implementation) jumps
+nnoremap <leader>ji :YcmCompleter GoToDefinition<CR>
 
-" Completion menu color
-highlight Pmenu         ctermfg=7 ctermbg=8
-highlight PmenuSel      ctermfg=0 ctermbg=7
-highlight PmenuSbar     ctermfg=7 ctermbg=0
-highlight PmenuThumb    ctermfg=0 ctermbg=7
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Miscellaneous workarounds
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
