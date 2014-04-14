@@ -211,3 +211,13 @@ highlight Pmenu         ctermfg=7 ctermbg=8
 highlight PmenuSel      ctermfg=0 ctermbg=7
 highlight PmenuSbar     ctermfg=7 ctermbg=0
 highlight PmenuThumb    ctermfg=0 ctermbg=7
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Miscellaneous workarounds
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set-up xterm-style keys sent by tmux with xterm-keys on
+if &term =~ '^screen'
+    execute "set <xUp>=\e[1;*A"
+    execute "set <xDown>=\e[1;*B"
+    execute "set <xRight>=\e[1;*C"
+    execute "set <xLeft>=\e[1;*D"
+endif
