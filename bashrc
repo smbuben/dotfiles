@@ -170,9 +170,9 @@ function __set_prompt()
     if [ -n "$gitstatus" ] ; then
         __add_to_prompt $vcscolor "$gitstatus" $sepcolor ":"
     fi
-    PS1="\[$sepcolor\][$PS1\[$sepcolor\]]"
+    PS1="\[$sepcolor\]($PS1\[$sepcolor\])"
     __add_to_prompt $usercolor "\\$"
-    __add_to_prompt $NOCOLOR " "
+    __add_to_prompt $NOCOLOR "\n"
 }
 
 function __set_titlebar()
