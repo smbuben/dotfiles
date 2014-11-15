@@ -87,7 +87,7 @@ syntax enable
 set background=dark
 let g:molokai_original=1
 colorscheme molokai
-"g:solarized_termcolors=256
+"let g:solarized_termcolors=256
 "colorscheme solarized
 
 " Highlight the current line and column
