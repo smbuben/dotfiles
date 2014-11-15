@@ -36,6 +36,15 @@ set -o vi
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# gnome-terminal 3.12+ no longer self identifies in COLORTERM (bug? feature?)
+if [ -z "$COLORTERM" ] ; then
+    parent=`cat /proc/$PPID/cmdline`
+    if [ "$parent" != "${parent/gnome-terminal/}" ] ; then
+        export COLORTERM=gnome-terminal
+    fi
+    unset parent
+fi
+
 # "fix" terminal identification
 if [ "$TERM" != "screen" ] ; then
     case "$COLORTERM" in
