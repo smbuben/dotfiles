@@ -1,6 +1,8 @@
 [core]
 	editor = vim
 	autocrlf = input
+[push]
+	default = simple
 [help]
 	autocorrect = 1
 [color]
