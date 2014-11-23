@@ -51,3 +51,9 @@ alias unmount='umount'
 alias df='df -h'
 alias tm='tmux'
 alias :q='exit'
+
+# Security Workarounds
+# disable LESSOPEN for default less (http://seclists.org/oss-sec/2014/q4/769)
+alias less='less -L'
+# force strings -a (http://seclists.org/fulldisclosure/2014/Oct/112)
+alias strings='strings -a'

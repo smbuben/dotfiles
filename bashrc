@@ -282,8 +282,12 @@ if [ -f /etc/bash_completion ]; then
 fi
 
 # -----------------------------------------------------------------------------
-#   MISCELLANEOUS
+#   SECURITY WORKAROUNDS
 # -----------------------------------------------------------------------------
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+# kill lesspipe, see http://seclists.org/oss-sec/2014/q4/769
+# typical usage:
+#   make less more friendly for non-text input files, see lesspipe(1)
+#   [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+export LESSOPEN=
+export LESSCLOSE=
