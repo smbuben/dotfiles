@@ -43,14 +43,14 @@ alias r='fc -s'
 alias hgrep='history | grep'
 
 # Processes
-alias ps='ps -ef'
+alias psef='ps -ef'
 alias psgrep='ps -ef | grep'
 
 # Miscellaneous
 alias unmount='umount'
 alias df='df -h'
 alias tm='tmux'
-alias :q='exit'
+alias netstat46='netstat -anpA inet -A inet6'
 
 # Security Workarounds
 # disable LESSOPEN for default less (http://seclists.org/oss-sec/2014/q4/769)
