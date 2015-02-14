@@ -86,21 +86,28 @@ syntax enable
 " Set color scheme
 set background=dark
 let g:molokai_original=1
-colorscheme molokai
-"let g:solarized_termcolors=256
-"colorscheme solarized
+let g:rehash256=1
+let g:solarized_termcolors=256
+for scheme in [ 'molokai', 'solarized', 'industry', 'default' ]
+    try
+        execute 'colorscheme '.scheme
+        break
+    catch
+        continue
+    endtry
+endfor
 
 " Highlight the current line and column
 set cursorline
 "set cursorcolumn
 
-" For colorschemes that don't use reasonable highlight colors
-"highlight CursorLine cterm=NONE ctermbg=darkgrey guibg=darkgrey
-"highlight CursorColumn cterm=NONE ctermbg=darkgrey guibg=darkgrey
+" Create a marker line at 80 columns and 100+ columns
+let &colorcolumn="80,".join(range(100,320),",")
 
-" Create a marker line at 80 columns
-highlight ColorColumn cterm=None ctermbg=darkgrey guibg=darkgrey
-set colorcolumn=80
+" Error highlight spaces at the end of lines and all tabs
+highlight BadSpaces ctermbg=red guibg=red
+autocmd Syntax * syntax match BadSpaces /\s\+$/ containedin=ALL
+autocmd Syntax * syntax match BadSpaces /\t\+/ containedin=ALL
 
 " Disable Background Color Erase (BCE) so that color schemes
 " render properly when inside 256-color tmux and GNU screen.
