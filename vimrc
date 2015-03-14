@@ -11,11 +11,14 @@
 " NOTE: This sets 'nocompatible'.
 runtime! debian.vim
 
+" apt install vim-pathogen && vim-addon-manager install pathogen
+execute pathogen#infect()
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Sets how many lines of history VIM has to remember
-set history=50
+set history=100
 
 " Enable filetype plugins
 filetype plugin on
@@ -25,9 +28,6 @@ filetype indent off
 
 " No filetype automatic commenting
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" apt-get install vim-youcompleteme
-set runtimepath+=/usr/share/vim-youcompleteme
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -80,6 +80,9 @@ set tm=500
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors, Fonts, and Appearance
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Set encoding to allow symbols
+set encoding=utf-8
+
 " Enable syntax highlighting
 syntax enable
 
@@ -104,10 +107,9 @@ set cursorline
 " Create a marker line at 80 columns and 100+ columns
 let &colorcolumn="80,".join(range(100,320),",")
 
-" Error highlight spaces at the end of lines and all tabs
-highlight BadSpaces ctermbg=red guibg=red
-autocmd Syntax * syntax match BadSpaces /\s\+$/ containedin=ALL
-autocmd Syntax * syntax match BadSpaces /\t\+/ containedin=ALL
+" Display invisible characters
+set listchars=eol:$,tab:>\ ,trail:~,extends:>,precedes:<
+set list
 
 " Disable Background Color Erase (BCE) so that color schemes
 " render properly when inside 256-color tmux and GNU screen.
@@ -151,6 +153,9 @@ map j gj
 map k gk
 map <Up> g<Up>
 map <Down> g<Down>
+map 0 g0
+map ^ g^
+map $ g$
 
 " Smart way to move between windows
 map <C-j> <C-W>j
@@ -161,6 +166,10 @@ map <C-Up> <C-W><Up>
 map <C-Down> <C-W><Down>
 map <C-Left> <C-W><Left>
 map <C-Right> <C-W><Right>
+
+" Search automatically centers
+map n nzz
+map N Nzz
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing
@@ -178,6 +187,7 @@ endfunc
 " Enable automatic white space stripping for certain file types
 "autocmd BufWrite *.py :call StripTrailingWS()
 
+" Easy change tab length
 func! ChangeTabLen(len)
     exe "set shiftwidth=".a:len
     exe "set tabstop=".a:len
@@ -212,6 +222,26 @@ nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
 
 " Shortcut definition (i.e. implementation) jumps
 nnoremap <leader>ji :YcmCompleter GoToDefinition<CR>
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Vim-Airline
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Always display the status line
+set laststatus=2
+
+" Detect the current insert method
+let g:airline_detect_iminsert=1
+
+" Define correct unicode symbols for status bar
+if !exists('g:airline_symbols')
+    let g:airline_symbols={}
+endif
+let g:airline_left_sep='▶'
+let g:airline_right_sep='◀'
+let g:airline_symbols.linenr='¶'
+let g:airline_symbols.branch='⎇'
+let g:airline_symbols.paste='ρ'
+let g:airline_symbols.whitespace='Ξ'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Miscellaneous workarounds
