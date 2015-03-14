@@ -28,7 +28,6 @@ alias lless='less'
 alias lles='less'
 alias les='less'
 alias lesss='less'
-alias lss='less'
 
 # Searching
 alias grp='grep'
@@ -44,6 +43,7 @@ alias hgrep='history | grep'
 
 # Processes
 alias psef='ps -ef'
+alias pscg='ps xawf -eo pid,user,cgroup,args'
 alias psgrep='ps -ef | grep'
 
 # Miscellaneous

@@ -8,15 +8,15 @@
 # append to the history file, don't overwrite
 shopt -s histappend
 
+# timestamp history
+export HISTTIMEFORMAT='%F %T '
+
 # ignore space-starting commands and duplicates
 export HISTCONTROL=ignoreboth
 
 # custom history size
 export HISTSIZE=1000
 export HISTFILESIZE=1000
-
-# timestamp history
-export HISTTIMEFORMAT='%F %T '
 
 # -----------------------------------------------------------------------------
 #   PATH CONTROL
