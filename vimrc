@@ -149,27 +149,27 @@ autocmd BufReadPost *
     \ endif
 
 " Treat long lines as break lines
-map j gj
-map k gk
-map <Up> g<Up>
-map <Down> g<Down>
-map 0 g0
-map ^ g^
-map $ g$
+noremap j gj
+noremap k gk
+noremap <Up> g<Up>
+noremap <Down> g<Down>
+noremap 0 g0
+noremap ^ g^
+noremap $ g$
 
 " Smart way to move between windows
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-map <C-Up> <C-W><Up>
-map <C-Down> <C-W><Down>
-map <C-Left> <C-W><Left>
-map <C-Right> <C-W><Right>
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+nnoremap <C-Up> <C-W><Up>
+nnoremap <C-Down> <C-W><Down>
+nnoremap <C-Left> <C-W><Left>
+nnoremap <C-Right> <C-W><Right>
 
 " Search automatically centers
-map n nzz
-map N Nzz
+nnoremap n nzz
+nnoremap N Nzz
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing
@@ -197,16 +197,17 @@ endfunc
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<CR>
+nnoremap <leader>ss :setlocal spell!<CR>
 
 " Toggle line numbers.
-nmap <leader>n :set invnumber<CR>
+nnoremap <leader>n :set invrelativenumber<CR>
+nnoremap <leader>m :set invnumber<CR>
 
 " Reload .vimrc
-map <leader>r :source ~/.vimrc<CR>
+nnoremap <leader>r :source ~/.vimrc<CR>
 
 " Edit .vimrc
-map <leader>e :e ~/.vimrc<CR>
+nnoremap <leader>e :e ~/.vimrc<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Ctags
