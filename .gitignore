@@ -1,3 +1,5 @@
 *.local
 vim/.netrwhist
 vim/bundle/*
+!vim/bundle/plugins-*
+vim/doc/tags
