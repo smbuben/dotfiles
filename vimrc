@@ -232,16 +232,21 @@ set laststatus=2
 " Detect the current insert method
 let g:airline_detect_iminsert=1
 
-" Define correct unicode symbols for status bar
-if !exists('g:airline_symbols')
-    let g:airline_symbols={}
+" Use powerline fonts or correct unicode symbols for status bar
+let g:airline_powerline_fonts=0
+if !g:airline_powerline_fonts
+    if !exists('g:airline_symbols')
+        let g:airline_symbols={}
+    endif
+    "let g:airline_left_sep='▶'
+    "let g:airline_right_sep='◀'
+    let g:airline_left_sep=''
+    let g:airline_right_sep=''
+    let g:airline_symbols.linenr='¶'
+    let g:airline_symbols.branch='⎇'
+    let g:airline_symbols.paste='ρ'
+    let g:airline_symbols.whitespace='Ξ'
 endif
-let g:airline_left_sep='▶'
-let g:airline_right_sep='◀'
-let g:airline_symbols.linenr='¶'
-let g:airline_symbols.branch='⎇'
-let g:airline_symbols.paste='ρ'
-let g:airline_symbols.whitespace='Ξ'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Miscellaneous workarounds
