@@ -148,15 +148,16 @@ function __set_prompt()
     local sepcolor histcolor usercolor hostcolor pathcolor vcscolor
     case "$TERM" in
         *256color)
-            sepcolor='\e[38;05;242m'
-            histcolor='\e[38;05;66m'
-            usercolor='\e[38;05;46m'
+            # emulate solarized
+            sepcolor='\e[38;05;12m'
+            histcolor='\e[38;05;12m'
+            usercolor='\e[38;05;64m'
             if [ "$USER" = "root" ] ; then
                 usercolor='\e[38;05;160m'
             fi
             hostcolor='\e[38;05;33m'
-            pathcolor='\e[38;05;255m'
-            vcscolor='\e[38;05;127m'
+            pathcolor='\e[38;05;230m'
+            vcscolor='\e[38;05;164m'
             ;;
         *)
             sepcolor=$NOCOLOR
