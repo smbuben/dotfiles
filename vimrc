@@ -100,6 +100,19 @@ for scheme in [ 'molokai', 'solarized', 'industry', 'default' ]
     endtry
 endfor
 
+" Display relative line numbers in normal mode, absolute in insert
+set relativenumber
+augroup insert_numbers
+    autocmd!
+    autocmd InsertEnter * set norelativenumber
+    autocmd InsertEnter * set number
+augroup END
+augroup normal_numbers
+    autocmd!
+    autocmd InsertLeave * set nonumber
+    autocmd InsertLeave * set relativenumber
+augroup END
+
 " Highlight the current line and column
 set cursorline
 "set cursorcolumn
