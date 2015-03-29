@@ -2,3 +2,5 @@ bling/vim-airline
 tpope/vim-fugitive
 scrooloose/nerdcommenter
 scrooloose/nerdtree
+sirver/ultisnips
+honza/vim-snippets

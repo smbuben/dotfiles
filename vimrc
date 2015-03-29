@@ -233,6 +233,15 @@ nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>ji :YcmCompleter GoToDefinition<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Plugin: Ultisnips
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Rebind UltiSnips to not conflict with YouCompleteMe
+let g:UltiSnipsExpandTrigger='<C-j>'
+let g:UltiSnipsListSnippets='<C-e>'
+let g:UltiSnipsJumpForwardTrigger='<C-j>'
+let g:UltiSnipsJumpBackwardTrigger='<C-k>'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Plugin: Vim-Airline
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Always display the status line
