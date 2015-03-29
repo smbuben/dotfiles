@@ -20,14 +20,8 @@ execute pathogen#infect()
 " Sets how many lines of history VIM has to remember
 set history=100
 
-" Enable filetype plugins
-filetype plugin on
-
-" No filetype automatic indenting
-filetype indent off
-
-" No filetype automatic commenting
-autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" Enable filetype plugins and indentation
+filetype plugin indent on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -38,8 +32,8 @@ set wildmenu
 " Display completed items the same way as the shell
 set wildmode=longest,list,full
 
-" Ignore compiled files
-set wildignore=*.o,*.pyc,*~
+" Ignore compiled files and backup files
+set wildignore=*.o,*.a,*.so,*.pyc,*.pyo,*~,*.bak
 
 "Always show current position
 set ruler
@@ -47,13 +41,13 @@ set ruler
 " A buffer becomes hidden when it is abandoned
 set hidden
 
-" Configure backspace so it acts as it should act
+" Configure backspace so it acts as it is supposed to act
 set backspace=eol,start,indent
 
 " Ignore case when searching
 set ignorecase
 
-" When searching try to be smart about cases
+" When searching be smart about cases
 set smartcase
 
 " Highlight search results
@@ -121,7 +115,7 @@ set cursorline
 let &colorcolumn="80,".join(range(100,320),",")
 
 " Display invisible characters
-set listchars=eol:$,tab:>\ ,trail:~,extends:>,precedes:<
+set listchars=eol:¶,tab:>\ ,trail:~,extends:>,precedes:<
 set list
 
 " Disable Background Color Erase (BCE) so that color schemes
@@ -161,7 +155,7 @@ autocmd BufReadPost *
     \   exe "normal g'\"" |
     \ endif
 
-" Treat long lines as break lines
+" Treat long lines as break lines by default
 noremap j gj
 noremap k gk
 noremap <Up> g<Up>
@@ -170,15 +164,13 @@ noremap 0 g0
 noremap ^ g^
 noremap $ g$
 
-" Smart way to move between windows
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
-nnoremap <C-Up> <C-W><Up>
-nnoremap <C-Down> <C-W><Down>
-nnoremap <C-Left> <C-W><Left>
-nnoremap <C-Right> <C-W><Right>
+noremap gj j
+noremap gk k
+noremap g<Up> <Up>
+noremap g<Down> <Down>
+noremap g0 0
+noremap g^ ^
+noremap g$ $
 
 " Search automatically centers
 nnoremap n nzz
@@ -222,6 +214,9 @@ nnoremap <leader>r :source ~/.vimrc<CR>
 " Edit .vimrc
 nnoremap <leader>e :e ~/.vimrc<CR>
 
+" View man pages directly in vim
+runtime ftplugin/man.vim
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Ctags
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -229,7 +224,7 @@ nnoremap <leader>e :e ~/.vimrc<CR>
 set tags=./tags;/
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => YouCompleteMe
+" => Plugin: YouCompleteMe
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Shortcut declaration jumps
 nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
@@ -238,7 +233,7 @@ nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>ji :YcmCompleter GoToDefinition<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Vim-Airline
+" => Plugin: Vim-Airline
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Always display the status line
 set laststatus=2
