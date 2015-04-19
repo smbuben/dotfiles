@@ -1,98 +1,77 @@
-" All system-wide defaults are set in $VIMRUNTIME/debian.vim (usually just
-" /usr/share/vim/vimcurrent/debian.vim) and sourced by the call to :runtime
-" you can find below.  If you wish to change any of those settings, you should
-" do it in this file (/etc/vim/vimrc), since debian.vim will be overwritten
-" everytime an upgrade of the vim packages is performed.  It is recommended to
-" make changes after sourcing debian.vim since it alters the value of the
-" 'compatible' option.
+"--------------------------------------------------------------
+"   Plugin and Runtime Management
+"--------------------------------------------------------------
+"{{{
+runtime! debian.vim             " Enable Debian-specific behaviors
+runtime! ftplugin/man.vim       " View man pages directly in vim
 
-" This line should not be removed as it ensures that various options are
-" properly set to work with the Vim-related packages available in Debian.
-" NOTE: This sets 'nocompatible'.
-runtime! debian.vim
-
+" Use Pathogen to manage plugins and the runtime path
 " apt install vim-pathogen && vim-addon-manager install pathogen
 execute pathogen#infect()
+"}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Sets how many lines of history VIM has to remember
-set history=100
+"--------------------------------------------------------------
+"   General Behavior
+"--------------------------------------------------------------
+"{{{
+set nocompatible                " Improved!
 
-" Enable filetype plugins and indentation
-filetype plugin indent on
+filetype plugin indent on       " Enable file type detect and assist
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => VIM user interface
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Turn on the Wild menu
-set wildmenu
+scriptencoding utf-8            " utf-8 all the things
+set encoding=utf-8
 
-" Display completed items the same way as the shell
-set wildmode=longest,list,full
+set history=128                 " Increase number of history lines
+set backspace=eol,start,indent  " Intuitive backspace behavior
+set hidden                      " Background buffers without saving
+set lazyredraw                  " Don't redraw during macros (performance)
+set pastetoggle=<F10>           " Toggle between paste and normal modes
+set tags=.git/tags;$HOME        " Look for tags in the local repo first,
+                                " then recurse back to home
+set timeout                     " Timeout on mappings and key codes
+set timeoutlen=250              " Shorten time to wait after ESC
+set nomodeline                  " For security don't read modelines by default
+set nobackup                    " Turn off backups
+set writebackup                 " Except temporarily when overwriting a file
+set noswapfile                  " Don't use swap files
 
-" Ignore compiled files and backup files
-set wildignore=*.o,*.a,*.so,*.pyc,*.pyo,*~,*.bak
+" Alter 'formatoptions' after every filetype-specific plugin
+autocmd FileType * setlocal
+    \ formatoptions+=c          " Do auto-wrap comments using textwidth
+    \ formatoptions-=r          " Don't insert comment leader on <Enter>
+    \ formatoptions+=o          " Do insert comment leader on command
+    \ formatoptions+=q          " Do allow gq formatting
 
-"Always show current position
-set ruler
+" Load modelines on demand
+nnoremap <leader>dr :setlocal modeline \| :e<CR>
 
-" A buffer becomes hidden when it is abandoned
-set hidden
+" Edit and reload .vimrc
+nnoremap <leader>re :e ~/.vimrc<CR>
+nnoremap <leader>rr :source ~/.vimrc<CR>
+"}}}
 
-" Configure backspace so it acts as it is supposed to act
-set backspace=eol,start,indent
-
-" Ignore case when searching
-set ignorecase
-
-" When searching be smart about cases
-set smartcase
-
-" Highlight search results
-set hlsearch
-
-" Makes search act like search in modern browsers
-set incsearch
-
-" Don't redraw while executing macros (good performance config)
-set lazyredraw
-
-" For regular expressions turn magic on
-set magic
-
-" Show matching brackets when text indicator is over them
-set showmatch
-
-" No annoying sound on errors
-set noerrorbells
+"--------------------------------------------------------------
+"   User Interface
+"--------------------------------------------------------------
+"{{{
+set wildmenu                    " Enhanced command-line completion
+set wildmode=longest,list,full  " Display completions like a shell
+set wildignore+=*.o,*.a,*.so,   " Don't complete compiled files
+set wildignore+=*.pyc,*.pyo,    " Don't complete Python bytecode
+set wildignore+=*~,*.bak        " Don't complete backups
+set ruler                       " Always show the current position
+set scrolloff=3                 " Keep 3 lines above and below the cursor
+set foldmethod=marker           " Default to marker folding
+set foldenable                  " Turn on folding
+set hlsearch                    " Highlight search
+set ignorecase                  " Be case insensitive when searching
+set incsearch                   " Start search while entering search term
+set smartcase                   " Be case sensitive when input has capital
+set showmatch                   " Highlight matching brackets
+set noerrorbells                " Disable error sounds and indicators
 set novisualbell
 set t_vb=
 set tm=500
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Colors, Fonts, and Appearance
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Set encoding to allow symbols
-set encoding=utf-8
-
-" Enable syntax highlighting
-syntax enable
-
-" Set color scheme
-set background=dark
-let g:molokai_original=1
-let g:rehash256=1
-let g:solarized_termcolors=256
-for scheme in [ 'molokai', 'solarized', 'industry', 'default' ]
-    try
-        execute 'colorscheme '.scheme
-        break
-    catch
-        continue
-    endtry
-endfor
 
 " Display relative line numbers in normal mode, absolute in insert
 set relativenumber
@@ -106,17 +85,60 @@ augroup normal_numbers
     autocmd InsertLeave * set nonumber
     autocmd InsertLeave * set relativenumber
 augroup END
+nnoremap <leader>n :setlocal relativenumber! number!<CR>
 
-" Highlight the current line and column
+" Highlight the current line
 set cursorline
-"set cursorcolumn
 
 " Create a marker line at 80 columns and 100+ columns
-let &colorcolumn="80,".join(range(100,320),",")
+let &colorcolumn="80,".join(range(100,280),",")
+"}}}
 
-" Display invisible characters
+"--------------------------------------------------------------
+"   Text and Syntax
+"--------------------------------------------------------------
+"{{{
+" Turn on syntax highlighting
+syntax enable
+
+set expandtab                   " Use spaces instead of tabs
+set tabstop=4                   " 1 tab = 4 spaces
+set softtabstop=4
+set shiftwidth=4                " Each indentation level is one tab
+set smarttab                    " Backspace over 'tabs'
+set shiftround                  " Round indents to multiples of 'shiftwidth'
+
+" Toggle tab-to-space expansion
+nnoremap <leader>tt :setlocal expandtab!<CR>
+
+" Shortcut to change tab stop width
+func! ChangeTabLen(len)
+    exe "set tabstop=".a:len
+    exe "set softtabstop=".a:len
+    exe "set shiftwidth=".a:len
+endfunc
+
+" Select best available (dark) color scheme
+set background=dark
+let g:molokai_original=1
+let g:rehash256=1
+let g:solarized_termcolors=256
+for scheme in [ 'molokai', 'solarized', 'industry', 'default' ]
+    try
+        execute 'colorscheme '.scheme
+        break
+    catch
+        continue
+    endtry
+endfor
+
+" Whitespace visibility on by default, easy toggle off
 set listchars=eol:¶,tab:>\ ,trail:~,extends:>,precedes:<
 set list
+nnoremap <leader>wt :set list!<CR>
+
+" Enable modern shell syntax highlighting
+let g:is_posix=1
 
 " Disable Background Color Erase (BCE) so that color schemes
 " render properly when inside 256-color tmux and GNU screen.
@@ -124,126 +146,101 @@ set list
 if &term =~ '256color'
     set t_ut=
 endif
+"}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Files, backups and undo
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Turn backups off (this is what version control is for)
-set nobackup
-set writebackup
-set noswapfile
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Text, tab and indent related
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use spaces instead of tabs
-set expandtab
-
-" Be smart when using tabs ;)
-set smarttab
-
-" 1 tab == 4 spaces
-set shiftwidth=4
-set tabstop=4
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Moving around, tabs, windows and buffers
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Jump to the last position when reopening a file.
+"--------------------------------------------------------------
+"   Movement
+"--------------------------------------------------------------
+"{{{
+" Jump to the last position when reopening a file
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g'\"" |
     \ endif
 
 " Treat long lines as break lines by default
-noremap j gj
-noremap k gk
-noremap <Up> g<Up>
-noremap <Down> g<Down>
-noremap 0 g0
-noremap ^ g^
-noremap $ g$
+nnoremap j gj
+xnoremap j gj
+nnoremap k gk
+xnoremap k gk
+nnoremap <Up> g<Up>
+xnoremap <Up> g<Up>
+nnoremap <Down> g<Down>
+xnoremap <Down> g<Down>
+nnoremap 0 g0
+xnoremap 0 g0
+nnoremap ^ g^
+xnoremap ^ g^
+nnoremap $ g$
+xnoremap $ g$
 
-noremap gj j
-noremap gk k
-noremap g<Up> <Up>
-noremap g<Down> <Down>
-noremap g0 0
-noremap g^ ^
-noremap g$ $
+nnoremap gj j
+xnoremap gj j
+nnoremap gk k
+xnoremap gk k
+nnoremap g<Up> <Up>
+xnoremap g<Up> <Up>
+nnoremap g<Down> <Down>
+xnoremap g<Down> <Down>
+nnoremap g0 0
+xnoremap g0 0
+nnoremap g^ ^
+xnoremap g^ ^
+nnoremap g$ $
+xnoremap g$ $
 
 " Search automatically centers
 nnoremap n nzz
 nnoremap N Nzz
+"}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Editing
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Find trailing whitespace
-func! FindTrailingWS()
-    /\s\+$
-endfunc
-
-" Delete trailing whitespace on save
+"--------------------------------------------------------------
+"   Editing
+"--------------------------------------------------------------
+"{{{
+" Delete trailing whitespace on demand
 func! StripTrailingWS()
     %s/\s\+$//e
 endfunc
 
-" Enable automatic white space stripping for certain file types
-"autocmd BufWrite *.py :call StripTrailingWS()
-
-" Easy change tab length
-func! ChangeTabLen(len)
-    exe "set shiftwidth=".a:len
-    exe "set tabstop=".a:len
-endfunc
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Misc
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Toggle and untoggle spell checking
-nnoremap <leader>ss :setlocal spell!<CR>
+nnoremap <leader>st :setlocal spell!<CR>
+"}}}
 
-" Toggle line numbers.
-nnoremap <leader>n :set invrelativenumber<CR>
-nnoremap <leader>m :set invnumber<CR>
-
-" Reload .vimrc
-nnoremap <leader>r :source ~/.vimrc<CR>
-
-" Edit .vimrc
-nnoremap <leader>e :e ~/.vimrc<CR>
-
-" View man pages directly in vim
-runtime ftplugin/man.vim
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Ctags
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Recurse from the current directory backwards to find the tags
-set tags=./tags;/
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin: YouCompleteMe
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"--------------------------------------------------------------
+"   Plugins
+"--------------------------------------------------------------
+"{{{
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+" Plugin: YouCompleteMe
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 " Shortcut declaration jumps
 nnoremap <leader>jd :YcmCompleter GoToDeclaration<CR>
 
 " Shortcut definition (i.e. implementation) jumps
 nnoremap <leader>ji :YcmCompleter GoToDefinition<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin: Ultisnips
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Expand error messages
+nnoremap <leader>dd :YcmShowDetailedDiagnostic<CR>
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+" Plugin: Syntastic
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+" Plugin: UltiSnips
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 " Rebind UltiSnips to not conflict with YouCompleteMe
 let g:UltiSnipsExpandTrigger='<C-j>'
 let g:UltiSnipsListSnippets='<C-e>'
 let g:UltiSnipsJumpForwardTrigger='<C-j>'
 let g:UltiSnipsJumpBackwardTrigger='<C-k>'
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin: Vim-Airline
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+" Plugin: Vim-Airline
+" - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 " Always display the status line
 set laststatus=2
 
@@ -265,10 +262,12 @@ if !g:airline_powerline_fonts
     let g:airline_symbols.paste='ρ'
     let g:airline_symbols.whitespace='Ξ'
 endif
+"}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Miscellaneous workarounds
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"--------------------------------------------------------------
+"   Miscellaneous Workarounds
+"--------------------------------------------------------------
+"{{{
 " Set-up xterm-style keys sent by tmux with xterm-keys on
 if &term =~ '^screen'
     execute "set <xUp>=\e[1;*A"
@@ -276,3 +275,6 @@ if &term =~ '^screen'
     execute "set <xRight>=\e[1;*C"
     execute "set <xLeft>=\e[1;*D"
 endif
+"}}}
+
+" vim: ts=4:sw=4:et
